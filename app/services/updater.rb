@@ -9,6 +9,7 @@ class Updater
     DailyReport.create!(
       date: latest_data.date, count: latest_data.num_community_cases
     )
+    notify!
   end
 
   def self.call
@@ -28,5 +29,10 @@ class Updater
 
   def latest_data
     @latest_data ||= LatestNewsScraper.call
+  end
+
+  def notify!
+    notifier = IftttNotifier.new("Today's cases: #{latest_data.num_community_cases}")
+    notifier.send
   end
 end
