@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :daily_reports, only: :index do
+    collection do
+      get :latest
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root to: redirect('/daily_reports')
 end
