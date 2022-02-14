@@ -5,8 +5,9 @@ class IftttNotifier
   KEY = ENV.fetch('IFTTT_KEY')
   EVENT_NAME = ENV.fetch('IFTTT_EVENT_NAME', 'notify')
 
-  def initialize(message)
+  def initialize(message, url = nil)
     @message = message
+    @url = url
   end
 
   def send
@@ -15,7 +16,7 @@ class IftttNotifier
 
   private
 
-  attr_reader :message
+  attr_reader :message, :url
 
   def uri
     URI("https://maker.ifttt.com/trigger/#{EVENT_NAME}/with/key/#{KEY}")
@@ -29,7 +30,7 @@ class IftttNotifier
 
   def request
     request = Net::HTTP::Post.new(uri.path)
-    request.body = { value1: message }.to_json
+    request.body = { value1: message, value2: url }.to_json
     request['Content-Type'] = 'application/json'
     request
   end

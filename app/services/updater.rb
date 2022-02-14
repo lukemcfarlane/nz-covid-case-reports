@@ -7,7 +7,9 @@ class Updater
     return unless latest_data.date.today?
 
     DailyReport.create!(
-      date: latest_data.date, count: latest_data.num_community_cases
+      date: latest_data.date,
+      count: latest_data.num_community_cases,
+      href: latest_data.href,
     )
     notify!
   end
@@ -32,7 +34,10 @@ class Updater
   end
 
   def notify!
-    notifier = IftttNotifier.new("Today's cases: #{latest_data.num_community_cases}")
+    notifier = IftttNotifier.new(
+      "Today's cases: #{latest_data.num_community_cases}",
+      latest_data.href,
+    )
     notifier.send
   end
 end

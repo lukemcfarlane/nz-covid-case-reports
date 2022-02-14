@@ -2,12 +2,13 @@ require 'uri'
 require 'net/http'
 
 class LatestNewsScraper
-  URL = 'https://www.health.govt.nz/news-media/news-items'
+  BASE_URL = 'https://www.health.govt.nz'
+  URL = "#{BASE_URL}/news-media/news-items"
 
-  class Data < Struct.new(:date, :num_community_cases, keyword_init: true); end
+  class Data < Struct.new(:date, :num_community_cases, :href, keyword_init: true); end
 
   def call
-    Data.new(date: date, num_community_cases: num_community_cases)
+    Data.new(date: date, num_community_cases: num_community_cases, href: href)
   end
 
   def self.call
@@ -43,5 +44,11 @@ class LatestNewsScraper
   def num_community_cases
     match_data = /(\d+) community cases/.match(title)
     match_data[1]&.to_i
+  end
+
+  def href
+    anchor = latest_row.css('.views-field-title a')
+    path = anchor.attribute('href').value
+    "#{BASE_URL}#{path}"
   end
 end
