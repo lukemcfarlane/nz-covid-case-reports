@@ -42,8 +42,8 @@ class LatestNewsScraper
   end
 
   def num_community_cases
-    match_data = /(\d+) community cases/.match(title)
-    match_data[1]&.to_i
+    match_data = /([?:\d,]+) community cases/.match(title)
+    match_data[1]&.gsub(',', '').to_i
   end
 
   def href
