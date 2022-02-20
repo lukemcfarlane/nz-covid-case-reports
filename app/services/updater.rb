@@ -9,6 +9,7 @@ class Updater
     DailyReport.create!(
       date: latest_data.date,
       count: latest_data.num_community_cases,
+      canterbury_count: latest_data.num_canterbury_cases,
       href: latest_data.href,
     )
     notify!
@@ -34,10 +35,16 @@ class Updater
   end
 
   def notify!
+    puts notification_message
+
     notifier = IftttNotifier.new(
-      "Today's cases: #{latest_data.num_community_cases}",
+      notification_message,
       latest_data.href,
     )
     notifier.send
+  end
+
+  def notification_message
+    "#{latest_data.num_community_cases} new cases today, #{latest_data.num_canterbury_cases} in Canterbury"
   end
 end
