@@ -14,3 +14,5 @@
     <% end %>
   </tbody>
 </table>
+<br/>
+<%= line_chart DailyReport.group(:date).maximum(:count) %>
