@@ -75,7 +75,7 @@ class LatestNewsScraper
     return nil unless location_of_new_community_cases.present?
 
     match_data = location_of_new_community_cases.match(/Canterbury \(([?:\d,]+)\)/)
-    match_data&.[](1).to_i
+    match_data[1]&.gsub(',', '').to_i
   rescue nil
   end
 end
