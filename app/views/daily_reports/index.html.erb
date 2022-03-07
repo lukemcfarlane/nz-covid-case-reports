@@ -1,13 +1,15 @@
 <table>
   <thead>
     <th>Date</th>
-    <th>Count</th>
+    <th>New Cases (NZ)</th>
+    <th>New Cases (Canterbury)</th>
   </thead>
   <tbody>
     <% @daily_reports.each do |daily_report| %>
       <tr>
         <td><%= daily_report.date %></td>
         <td><%= daily_report.count %></td>
+        <td><%= daily_report.canterbury_count %></td>
       </tr>
     <% end %>
   </tbody>
