@@ -1,0 +1,14 @@
+<table>
+  <thead>
+    <th>Date</th>
+    <th>Count</th>
+  </thead>
+  <tbody>
+    <% @daily_reports.each do |daily_report| %>
+      <tr>
+        <td><%= daily_report.date %></td>
+        <td><%= daily_report.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
