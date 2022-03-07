@@ -15,4 +15,8 @@
   </tbody>
 </table>
 <br/>
-<%= line_chart DailyReport.group(:date).maximum(:count) %>
+<h1>New Cases (NZ)</h1>
+<%= line_chart DailyReport.group(:date).maximum(:count)%>
+<br/>
+<h1>New Cases (Canterbury)</h1>
+<%= line_chart DailyReport.group(:date).maximum(:canterbury_count)%>
