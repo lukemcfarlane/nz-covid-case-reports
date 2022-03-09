@@ -20,3 +20,6 @@
 <br/>
 <h1>New Cases (Canterbury)</h1>
 <%= line_chart DailyReport.group(:date).maximum(:canterbury_count)%>
+<br/>
+<h1>Report Times (Total: <%= DailyReport.count %>)</h1>
+<%= column_chart DailyReport.group("date_part('minute', created_at)").count %>
