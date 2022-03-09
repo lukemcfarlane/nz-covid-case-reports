@@ -22,4 +22,16 @@
 <%= line_chart DailyReport.group(:date).maximum(:canterbury_count)%>
 <br/>
 <h1>Report Times (Total: <%= DailyReport.count %>)</h1>
-<%= column_chart DailyReport.group("date_part('minute', created_at)").count %>
+<%= column_chart DailyReport.connection.execute(
+      <<-SQL.chomp
+        with minutes as
+          (select * from generate_series(0, 59))
+        select generate_series as minute, count(reports.id) from minutes
+        left join daily_reports reports on date_part('minute', reports.created_at) = minutes.generate_series
+        group by minutes.generate_series
+      SQL
+    )
+    .to_h { |r| [r['minute'], r['count']] },
+    xtitle: 'Minute',
+    ytitle: 'Count'
+%>
