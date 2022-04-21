@@ -20,6 +20,37 @@
 <br/>
 <h1>New Cases (Canterbury)</h1>
 <%= line_chart DailyReport.group(:date).maximum(:canterbury_count)%>
+<h1>New Cases (NZ) - 7 day average (Total: <%= DailyReport.count %>)</h1>
+<%= line_chart DailyReport.connection.execute(
+      <<-SQL.chomp
+        with daily_counts as
+          (select date, max(count) as count from daily_reports group by date)
+        select date, avg(count) over
+          (order by date rows between 6 preceding and current row) as seven_day_avg
+        from daily_counts
+        order by date
+      SQL
+    )
+    .to_h { |r| [r['date'], r['seven_day_avg']] },
+    xtitle: 'Date',
+    ytitle: 'Seven day average'
+%>
+<br/>
+<h1>New Cases (Canterbury) - 7 day average (Total: <%= DailyReport.count %>)</h1>
+<%= line_chart DailyReport.connection.execute(
+      <<-SQL.chomp
+        with daily_counts as
+          (select date, max(canterbury_count) as count from daily_reports group by date)
+        select date, avg(count) over
+          (order by date rows between 6 preceding and current row) as seven_day_avg
+        from daily_counts
+        order by date
+      SQL
+    )
+    .to_h { |r| [r['date'], r['seven_day_avg']] },
+    xtitle: 'Date',
+    ytitle: 'Seven day average'
+%>
 <br/>
 <h1>Report Times (Total: <%= DailyReport.count %>)</h1>
 <%= column_chart DailyReport.connection.execute(
